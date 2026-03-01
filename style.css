@@ -1,0 +1,593 @@
+body {
+  font-family: "Montserrat" , "Helvetica Neue" ,Arial,"Hiragino Kaku Gothic ProN","Hiragino Sans",Meiryo,sans-serif; /* まずこの英字フォントを探す(Google Fontsから読み込んでいればこれが使われる) */
+                           /* Montserratがない場合は標準的な欧文フォント(Arial)を使う */
+                           /* 日本語を表示するためのフォントでMacならヒラギノ、Windowsならメイリオが選ばれる */
+                           /* 万が一どれも無かったら、その端末の「標準のゴシック体」を使う */
+  justify-content: center; /* 画面の真ん中に寄せる */
+  font-size: 15px;
+  letter-spacing: .05em; /* 文字と文字の間を0.05文字分だけ広げる。高級感が出て文字が読みやすくなる */
+  color: #333;
+  margin: 0;  /* 他の要素の影響で画面の外側に余白ができてしまうのを防ぐため念の為 */
+  padding :0; /* 他の要素の影響で画面の内側に余白ができてしまうのを防ぐため */
+}
+
+a {
+  transition: opacity .3s; /* 透明度(opacity)が変化する時、0.3秒かけてふわっと変化させる命令 */
+  text-decoration: none;   /* リンク特有の下線を消す */
+  color: #fff;  /* 元の色：1ca9e3 */
+}
+
+img {
+  max-width: 100%; /* 画面幅に合わせて画像が自動で縮ませる。画像の幅は親要素(外側の箱)を超えさたくない */
+  height: auto;    /* 幅が縮まった時に、高さも自動で計算し比率（アスペクト比）を保たせる */
+  vertical-align: bottom; /* 画像の下にできる謎の隙間を消す */
+  border-style: none; /* 古いブラウザなどで画像にリンクを貼った時に出る青い枠線を消させる */
+}
+
+.pc-only {
+  display: block; /* PCの画面だけ表示させる */
+  /* 実は、このコードだけでは「パソコンの時だけ」という条件が成立しない */
+  /* 通常はMedia Queriesという仕組みとセットで「基本スマホでは消して、画面が広くなったら表示」と記述される */
+  /* なのでdisplay noneと組み合わせる必要がある */
+}
+
+.sp-only {
+  display: none; /* 基本スマホでは消しておき、画面が広くなったら表示する */
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/*--------------------------------
+ レイアウト
+---------------------------------*/
+.wrapper {
+  padding-top: 73px;
+}
+
+.section {
+  padding: 90px 0;
+}
+
+.section:nth-of-type(odd) {
+  background-color: #f7f7f7;　/* sectionクラスがついた要素を対象に奇数のものだけ色を変える */
+}                             /* 紫にするなら：F0F3FF */
+
+.container {
+  max-width: 1340px;
+  margin: 0 auto;
+  padding: 0 40px;
+}
+
+/*--------------------------------
+ 見出し
+---------------------------------*/
+.title {
+  font-size: 34px;
+  font-weight: bold;
+  line-height: 1;
+  margin-bottom: 40px;
+  text-align: center;
+  letter-spacing: .05em;
+  color: #333;
+}
+
+.lead {
+  font-size: 16px;
+  line-height: 1.8;
+  margin-bottom: 30px;
+}
+
+/*--------------------------------
+ヘッダー
+---------------------------------*/
+.header {
+  position: fixed;
+  top: 0;
+  z-index: 1;
+  width: 100%;
+  background-color: #57564F; /* 元の色：1A3636 */
+  box-shadow: 0 5px 10px -6px rgba(0,0,0,.1);
+}
+
+.header .container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 40px;
+}
+
+.header-logo {
+  font-family: "Tangerine","Optima", "Segoe UI", sans-serif;
+  font-weight: 500;        /* 1. 太さを数値で指定（標準は400、太字は700） */
+  letter-spacing: 0.1em;   /* 2. 文字の間隔をさらに広げて「抜け感」を出す */
+  font-size: 30px;
+  line-height: 1.2;
+  margin-right: 20px;
+}
+
+.header-logo a {
+  color: #fff; /* 元の色：3D365C */
+}
+
+.nav-list {
+  display: flex;
+  justify-content: space-between; /* 横並びになった項目を両端にぴったり寄せて間の余白を均等にする */
+  list-style: none; /* HTMLのulやliタグを使うと標準で左側につく●(黒丸)などのリストマークを消す */
+}
+
+.nav-item:not(:last-child) {
+  margin-right: 20px;
+}
+
+.nav-item a {
+  font-family: "Tangerine","Optima", "Segoe UI", sans-serif;
+  font-weight: 500;        /* 1. 太さを数値で指定（標準は400、太字は500） */
+  letter-spacing: 0.1em;   /* 2. 文字の間隔をさらに広げて「抜け感」を出す */
+  position: relative;
+  font-size: 30px;
+  display: inline-block;
+  padding: 5px 0;
+  transition: 0.3s;
+  color: #fff;
+}
+
+.nav-item a:after {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 0;
+  height: 3px;
+  content: "";
+  transition: 0.3s;
+  -webkit-transform: translateX(-50%);
+  transform: translateX(-50%);
+}
+
+/*--------------------------------
+ メインビジュアル
+---------------------------------*/
+.mv {                      /* 画面の高さに合わせて、文字や画像をど真ん中に配置する */
+  display: flex;           /* 中の要素をレイアウトしやすい状態（Flexbox）にする */
+  align-items: center;     /* 中身を上下の中央に配置する */
+  justify-content: center; /* 中身を左右の中央に配置する */
+  height: 85vh;            /* 画面の高さの「85%」の高さにする */
+  text-align: center;      /* 中の文字などを中央揃えにする */
+}
+
+.mv-container {
+  padding: 0 40px;
+  color: #57564F;
+}
+
+.mv-title { 
+  font-family: "Tangerine","Optima", sans-serif;
+  font-weight: 400;
+  font-size: 100px;
+  line-height: 1.2;     /* 行間を文字の1.2倍に指定 */
+  margin-bottom: 5px;   /* タイトルの下のサブタイトルとの間に5pxだけ隙間を作る */
+  letter-spacing: 0.05em; /* 文字と文字の間隔を 0.1文字分広げる */
+}
+
+.mv-subtitle {
+  font-family: "Tangerine","Optima", sans-serif;
+  font-size: 40px;
+  letter-spacing: 0.05em;
+  font-weight: 300;
+  margin-bottom: 50px;
+}
+
+.mv-text {
+  font-size: 16px;
+  line-height: 1.8;
+}
+
+/*--------------------------------
+ Works
+---------------------------------*/
+.title {
+  font-family: "Tangerine","Optima", "Segoe UI", sans-serif;
+  font-weight: 500;        /* 1. 太さを数値で指定（標準は400、太字は500） */
+  letter-spacing: 0.1em;  /* 2. 文字の間隔をさらに広げて「抜け感」を出す */
+  font-size: 50px;
+  color: #57564F;
+}
+
+ .works-list {
+  display: flex;
+  grid-template-columns: repeat(5, 300px); /* 1列300pxを5回繰り返す */
+  flex-wrap: wrap; /* 折り返しを許可 */
+  margin-bottom: -40px;
+  justify-content: center;
+}
+
+.works-item {
+  display: block;      /* これを忘れずに！ */
+  width: 200px;
+  height: auto;        /* 内容に合わせて自動調整 */
+  margin-right: 3%;
+  margin-bottom: 60px;
+  color: #333;
+  transition: transform 0.3s ease, box-shadow 0.3s ease; /* 浮き上がる動き */
+}
+
+/* マウスを乗せた時の動き */
+.works-item:hover {
+  transform: translateY(-20px); /* 上に20px浮く */
+}
+
+/* 画像に影をつけて立体感を出す */
+.works-item:hover .works-img img {
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  opacity: 0.9; /* ほんの少しだけ明るく/薄くする */
+}
+
+.works-img img {
+  border-radius: 3%; /* 画像の角を丸くする */
+  padding-bottom: 10px;
+}
+
+.works-name {
+  font-family: 'Zen Old Mincho',"Optima", "Segoe UI", sans-serif;
+  margin-bottom: 0; /* ブラウザが標準で持っているpタグの上下余白を消してworks-infoとの差縮める */
+}
+
+.works-info {
+  font-size: 12px;
+  color: #777; /* 説明文を少し薄くして「抜け感」を出す */
+  margin-top: 5px;     /* ここでタイトルのすぐ下の距離を調整（お好みで 2px〜5px） */
+  margin-bottom: 0; /* ブラウザが標準で持っているpタグの上下余白を消してworks-nameとの差縮める */
+}
+
+/*--------------------------------
+ 下層：Worksページ
+---------------------------------*/
+.article {
+  padding: 80px 0;
+}
+
+.article-container {
+  max-width: 1010px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.article-title-1 {
+  font-family: 'Zen Old Mincho',"Optima", "Segoe UI", sans-serif;
+  font-weight: 600;
+  margin-bottom: 50px;
+  text-align: left;
+  color: #57564F;
+}
+
+.article-title-2 {
+  font-family: 'Zen Old Mincho',"Optima", "Segoe UI", sans-serif;
+  font-weight: 600;
+  margin-bottom: 30px;
+  text-align: center;
+  color: #57564F;
+}
+
+.article-body {
+  max-width: 1080px;
+  margin: 0 auto;
+  margin-bottom: 80px;
+  text-align: center;
+}
+
+.img-flex-container {
+  display: flex;        /* 横並びにする */
+  justify-content: center; /* 画像の配置を中央揃えにする */
+  gap: 50px;            /* 画像と画像の間隔（お好みで調整） */
+  align-items: stretch;  /* 高さが違う場合、上下中央で揃える */
+  margin-bottom: 100px;
+}
+
+.img-flex-container img {
+  width: auto;           /* 好きな高さで固定（例：200px〜300px程度） */
+  height: 330px;         /* 比率を維持 */
+  object-fit: contain;  /* 画像を切り取らずに枠内に収める */
+}
+
+.img-flex-container a {  /* クリック前の画像にマウスを乗せたら指マークにする */
+  cursor: zoom-in;
+}
+
+/* 拡大画面（背景）の初期状態：非表示 */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8); /* 背景を暗く */
+  display: grid;
+  place-items: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: 0.4s;
+  z-index: 9999;
+}
+
+/* クリックされてURLの末尾に #img01 などがついた時の状態 */
+.modal:target {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* 拡大される画像本体 */
+.modal-content {
+  position: relative;
+  max-width: 90%;
+  max-height: 90%;
+}
+
+/* モーダル（拡大画面）全体では、ズームインのカーソルを解除する */
+.modal a {
+  cursor: default; /* 基本は矢印に戻す */
+}
+
+.modal-content img {
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 90vh;
+  border: 4px solid #fff;
+}
+
+/* 1. モーダル（拡大画面）の中の画像限定で、ホバー時の動きを「完全に無効化」する */
+.img-flex-container .modal-content a img:hover {
+  transform: none !important;   /* 強制的に「変化なし」にする */
+  opacity: 1 !important;        /* 透明度も戻す */
+  transition: none !important;   /* アニメーションも止める */
+}
+
+/* 2. ついでに、拡大中の画像にカーソルを乗せた時に「＋」が出ないように念押し */
+.modal-content a {
+  cursor: zoom-out !important;
+}
+
+/* 画像をクリックして閉じられることが伝わるようにカーソルを変える */
+.modal-content a img {
+  cursor: zoom-out;
+}
+
+/* 拡大画面の中にある全てのリンクで「ズームイン（＋）」が出ないように上書き */
+.modal a {
+  cursor: default;
+}
+
+/* 閉じるボタンと背景クリック用のリンク */
+.overlay {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  cursor: zoom-out !important; /* ズーム中、背景の暗い部分はクリックで閉じれることがわかるよう「-」表示に */
+}
+
+/* 「×」ボタンだけは、何が何でも指マーク（pointer）にする */
+.modal .close {
+  cursor: pointer !important;
+}
+
+/* ついでに、背景の暗い部分もクリックできることがわかるよう、指マークかズームアウトに */
+.modal .overlay {
+  cursor: zoom-out !important;
+}
+
+.close {
+  position: absolute;
+  top: -40px;
+  right: 0;
+  color: #fff;
+  font-size: 30px;
+  text-decoration: none;
+  cursor: pointer !important;  /* 閉じるボタン（×）の上では、しっかり「指マーク」にする */
+}
+
+/* クリックできる感が伝わるよう、画像にマウスを乗せた時に少し浮き上がらせたり、透明度を変えたりさせる */
+.img-flex-container a img:hover {
+  opacity: 0.8;
+  transform: scale(1.02);
+  transition: 0.3s;
+}
+
+.production-info {
+  max-width: 800px;     /* 全体の幅を制限 */
+  margin: 0 auto;       /* 全体を中央に寄せる */
+  padding: 20px;
+}
+
+.info-item-last {
+  display: block;          /* 横並び（flex）を解除して上下に並べる */
+  /* 全体を中央に寄せるための設定 */
+  max-width: 800px;    /* 好きな幅に制限（これがないと画面いっぱいに広がります） */
+  margin-left: auto;   /* 左右の余白を自動にして中央へ */
+  margin-right: auto;  /* 中身を左寄せにする設定 */
+  padding: 40px 0;     /* 上下の余白 */
+}
+
+.info-item {
+  display: flex;        /* 横並びにする */
+  border-bottom: 1px solid #e3e3e3; /* 項目間に薄い線を入れると見やすい */
+  padding: 5px 0;
+  align-items: baseline; /* 文字の底辺を揃える */
+}
+
+.info-item h3 {
+  font-family: 'Zen Old Mincho',"Optima", "Segoe UI", sans-serif;
+  width: 200px;         /* 見出しの幅を固定して縦のラインを揃える */
+  flex-shrink: 0;       /* 見出しが潰れないようにする */
+  font-size: 16px;
+  color: #57564F;
+  text-align: center;
+}
+
+.info-item-last h3 {
+  font-family: 'Zen Old Mincho',"Optima", "Segoe UI", sans-serif;
+  font-weight: bold;
+  color: #57564F;
+  width: 100%;
+  text-align: left;
+}
+
+.info-item p {
+  margin: 0;            /* 余計な余白を消す */
+  flex: 1;              /* 残りの幅をすべて使う */
+  text-align: left;
+}
+
+.article-body h3 {
+  position: relative;
+  font-size: 18px;
+  margin-bottom: 5px;
+}
+
+.article-body h3:not(:first-child) {
+  margin-top: 50px;
+}
+
+.article-body p {
+  font-size: 15px;
+  line-height: 1.8;
+  margin-bottom: 20px;
+  text-align: left;           /* 文章は左寄せ */
+  display: inline-block;      /* 中身の幅に合わせる */
+  max-width: 800px;           /* 広がりすぎないように制限 */
+  text-align: justify;        /* 両端を揃えると綺麗 */
+}
+
+.home-link {
+  text-align: center;
+}
+
+/*--------------------------------
+ Skill
+---------------------------------*/
+.skill-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin-bottom: -50px;
+}
+
+.skill-item {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  width: 48%;
+  margin-bottom: 50px;
+}
+
+.skill-img img {
+  width: 60px;
+  height: auto;
+  margin-right: 20px;
+  border-radius: 20%; /* 画像の角を丸くする */
+}
+
+.skill-body {
+  flex: 1;
+}
+
+.skill-name {
+  font-family: "Tangerine","Optima", sans-serif;
+  font-weight: bold;       /* 1. 太さを数値で指定（標準は400、太字は500） */
+  letter-spacing: 0.1em;  /* 2. 文字の間隔をさらに広げて「抜け感」を出す */
+  font-size: 30px;
+  margin-bottom: 10px;
+  color: #57564F;
+}
+
+.skill-text {
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+/*--------------------------------
+ About
+---------------------------------*/
+.profile {
+  display: flex;    /* Aboutの中に入っている要素を横並びにする */
+  flex-wrap: wrap;  /* 画面が狭くなって要素が入りきらなくなった時に自動で2行目に折り返させる */
+  max-width: 800px; /* プロフの幅が最大で800pxまでしか広がせない。画面の大きいPCでも横に間延びするのを防ぐため */
+  margin: 0 auto;   /* 左右の余白(margin(をauto(自動(にし要素を画面の真ん中に配置 */
+}
+
+.profile-img {
+  width: 20%;
+  margin-right: 30px;
+  border-radius: 50%;
+}
+
+.profile-img img { /*　画像を丸にする　*/
+  border-radius: 50%;
+}
+
+.profile-body { /* プロフィール画像以外の残りスペースを、自己紹介テキストが全て埋める */
+  flex: 1;
+}
+
+.profile-body p {
+  font-size: 15px;
+  line-height: 1.8; /* 行間を文字サイズの1.8倍にする(15px × 1.8 = 27px) */
+}
+
+.profile-body p:not(:last-child) { /* 最後の1つを除いて、文章の間にだけ余白を作る */
+  margin-bottom: 30px;
+}
+
+/*--------------------------------
+ Contact
+---------------------------------*/
+.contact {
+  text-align: center; /* 文字を中央揃えにする */
+}
+
+.contact-item:not(:last-child) { /* 一番最後（一番右）の項目以外 */
+  margin-right: 10px; /* 右側に10pxの隙間をあける */
+}
+
+.contact-text {
+  margin-top: 10px;
+}
+
+/*--------------------------------
+ ページトップ
+---------------------------------*/
+.page-top {
+  font-weight: bold;  /* 文字を太字に */
+  padding: 10px;      /* ボタンの文字の周りに 10pxの余白を作る */
+  cursor: pointer;    /* カーソルをこのボタンの上に重ねた時、矢印から手のマーク✋に変える */
+  text-align: center; /* ボタンという箱の中で、文字を左右中央に配置する */
+  background-color: #57564F; /* 紫にするなら555879 */
+  width: 100%;
+  bottom: 20px;
+  display: block;
+  text-decoration: none;
+　}
+
+.page-top .material-icons-outlined {
+  vertical-align: bottom; /* アイコンの垂直方向の配置を調整。アイコンと「TOP」という文字を横に並べると */
+                          /* アイコンだけ少し上に浮いて見えることがあるためbottom(下揃え)を指定することで */
+                          /* 隣にある文字のベースライン（下のライン）にアイコンを合わせることができる */
+  color: #ffffff;
+}
+
+/*--------------------------------
+ フッター
+---------------------------------*/
+.footer { /*  中に入っているコピーライトなどの文字がフッターの端にピタッとくっつかず、ゆとりを持って表示させたい*/
+  padding: 30px; /* フッターの内側に30pxの余白を作る */
+  background-color: #57564F; /* 紫にするなら555879 */
+}
+
+.copyright {
+  font-size: 10px;
+  text-align: center;
+  color: #fff;
+}
+
+
+
